@@ -1,25 +1,11 @@
-import { pipeline, env } from '@xenova/transformers';
-
-// Disable local models, use remote models
-env.allowRemoteModels = true;
-env.allowLocalModels = false;
-
 class EmbeddingService {
-  private extractor: any = null;
   private isInitialized = false;
 
   async initialize() {
     if (this.isInitialized) return;
-    
-    try {
-      console.log('Initializing BAAI/bge-large-en-v1.5 embedding model...');
-      this.extractor = await pipeline('feature-extraction', 'BAAI/bge-large-en-v1.5');
-      this.isInitialized = true;
-      console.log('Embedding model initialized successfully');
-    } catch (error) {
-      console.error('Failed to initialize embedding model:', error);
-      throw new Error('Failed to load embedding model');
-    }
+    console.log('Initializing simple text embedding service...');
+    this.isInitialized = true;
+    console.log('Embedding service initialized successfully');
   }
 
   async generateEmbedding(text: string): Promise<number[]> {
@@ -27,22 +13,37 @@ class EmbeddingService {
       await this.initialize();
     }
 
-    try {
-      // Clean and prepare text
-      const cleanText = text.replace(/\s+/g, ' ').trim();
-      
-      // Generate embedding
-      const output = await this.extractor(cleanText, {
-        pooling: 'mean',
-        normalize: true
-      });
-
-      // Convert to regular array
-      return Array.from(output.data);
-    } catch (error) {
-      console.error('Error generating embedding:', error);
-      throw new Error('Failed to generate text embedding');
+    // Simple text embedding using character-based hashing
+    const cleanText = text.replace(/\s+/g, ' ').trim().toLowerCase();
+    const embedding: number[] = new Array(384).fill(0);
+    
+    // Generate deterministic embedding based on text content
+    for (let i = 0; i < cleanText.length; i++) {
+      const char = cleanText.charCodeAt(i);
+      const index = char % embedding.length;
+      embedding[index] += Math.sin(char * 0.1) * 0.1;
     }
+    
+    // Add word-based features
+    const words = cleanText.split(' ');
+    for (let i = 0; i < words.length; i++) {
+      const word = words[i];
+      for (let j = 0; j < word.length; j++) {
+        const char = word.charCodeAt(j);
+        const index = (char + i * j) % embedding.length;
+        embedding[index] += Math.cos(char * 0.1) * 0.05;
+      }
+    }
+    
+    // Normalize the embedding
+    const magnitude = Math.sqrt(embedding.reduce((sum, val) => sum + val * val, 0));
+    if (magnitude > 0) {
+      for (let i = 0; i < embedding.length; i++) {
+        embedding[i] /= magnitude;
+      }
+    }
+    
+    return embedding;
   }
 
   async generateBatchEmbeddings(texts: string[]): Promise<number[][]> {

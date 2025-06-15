@@ -36,8 +36,17 @@ app.use((req, res, next) => {
   next();
 });
 
+import { initializeApplication } from "./initialize";
+
 (async () => {
   const server = await registerRoutes(app);
+  
+  // Initialize TTB.pdf on startup
+  try {
+    await initializeApplication();
+  } catch (error) {
+    console.error('Failed to initialize application:', error);
+  }
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
