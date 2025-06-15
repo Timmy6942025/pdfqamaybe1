@@ -73,6 +73,7 @@ export class MemStorage implements IStorage {
     const document: Document = { 
       ...insertDocument, 
       id, 
+      processed: insertDocument.processed ?? false,
       createdAt: new Date() 
     };
     this.documents.set(id, document);
@@ -140,6 +141,7 @@ export class MemStorage implements IStorage {
     const message: ChatMessage = { 
       ...insertMessage, 
       id, 
+      context: insertMessage.context as any || null,
       timestamp: new Date() 
     };
     this.chatMessages.set(id, message);
