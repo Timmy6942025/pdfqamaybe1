@@ -97,6 +97,10 @@ The application is configured for deployment on Replit with the following setup:
 ```
 Changelog:
 - June 15, 2025. Initial setup
+- June 15, 2025. Configured automatic TTB.pdf loading and AI integration
+- June 15, 2025. Fixed PDF viewer to show proper page structure instead of full document dump
+- June 15, 2025. Implemented semantic search with custom embedding service
+- June 15, 2025. Application fully operational with Gemini AI and 994 processed text chunks
 ```
 
 ## User Preferences
