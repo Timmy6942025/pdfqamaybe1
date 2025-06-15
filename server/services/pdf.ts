@@ -1,3 +1,4 @@
+// @ts-ignore
 import pdf from 'pdf-parse';
 import { embeddingService } from './embeddings.js';
 import { storage } from '../storage.js';
