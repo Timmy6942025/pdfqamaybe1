@@ -7,8 +7,7 @@ class EmbeddingService {
     console.log('Initializing BAAI BGE-M3 embedding service...');
     // Load BAAI BGE-M3 - multilingual embedding model with excellent performance
     // BGE-M3 supports dense retrieval, multi-vector retrieval, and sparse retrieval
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { pipeline } = require('@xenova/transformers');
+    const { pipeline } = await import('@xenova/transformers');
     this.embedder = await pipeline('feature-extraction', 'BAAI/bge-m3');
     this.isInitialized = true;
     console.log('BAAI BGE-M3 embedding service initialized successfully');
