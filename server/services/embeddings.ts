@@ -4,13 +4,13 @@ class EmbeddingService {
 
   async initialize() {
     if (this.isInitialized) return;
-    console.log('Initializing BAAI BGE-M3 embedding service...');
-    // Load BAAI BGE-M3 - multilingual embedding model with excellent performance
-    // BGE-M3 supports dense retrieval, multi-vector retrieval, and sparse retrieval
+    console.log('Initializing BAAI BGE-Large-EN-V1.5 embedding service...');
+    // Load BAAI BGE-Large-EN-V1.5 - high-performance English embedding model
+    // This model provides excellent semantic understanding for English text
     const { pipeline } = await import('@xenova/transformers');
-    this.embedder = await pipeline('feature-extraction', 'BAAI/bge-m3');
+    this.embedder = await pipeline('feature-extraction', 'BAAI/bge-large-en-v1.5');
     this.isInitialized = true;
-    console.log('BAAI BGE-M3 embedding service initialized successfully');
+    console.log('BAAI BGE-Large-EN-V1.5 embedding service initialized successfully');
   }
 
   async generateEmbedding(text: string): Promise<number[]> {
