@@ -12,7 +12,7 @@ class AIService {
 
   constructor() {
     this.genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-    this.model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    this.model = this.genAI.getGenerativeModel({ model: 'gemini-2.5-flash-preview-05-20' });
   }
 
   async generateResponse(question: string, context: string): Promise<string> {
